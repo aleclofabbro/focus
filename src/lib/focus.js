@@ -1,13 +1,19 @@
 const R = require('ramda')
 const Rx = require('rxjs')
 
-const root = (init_state) => {
-  const state = new Rx.BehaviorSubject(init_state)
-  const state$ = state.observeOn(Rx.Scheduler.queue)//.subscribeOn(Rx.Scheduler.queue)
-  const root = R.lens(() => state.value, _state => {
-    state.next(_state)
+const root = (next, init_state) => {
+  let state
+  const root = R.lens(() => state, _state => {
+    if(state !== _state){
+      state = _state
+      next(_state)
+    }
   })
-  return _focus(root, state$)
+  const focus = _focus(root)
+  return {
+    ...focus,
+    start: () => focus.set(init_state)
+  }
 }
 
 const is_empty = v => {
@@ -16,20 +22,21 @@ const is_empty = v => {
     v !== v
 }
 
-const _focus = (lens, state$, {ns}={}) => {
+const _focus = (lens, {ns}={}) => {
+  let default_to
   const focus = (on, {ns}={}) => {
     ns = ns ? ns : 'string' === typeof on ? on.split('.') : ns
     on = 'string' === typeof on ? R.lensPath(on.split('.')) : on
     const on_lens = R.compose(lens, on)
-    const on_state$ = state$.map(R.view(on_lens)).distinctUntilChanged()
-    return _focus(on_lens, on_state$, {ns})
+    return _focus(on_lens, {ns})
   }
   const set = R.set(lens, R.__, null)
   const over = R.over(lens, R.__, null)
   const view = () => R.view(lens, null)
   const defaultTo = (def, _is_empty) => {
     if((_is_empty || is_empty)(view())) {
-      set(def)
+      default_to = def
+      // set(def)
     }
   }
   return {
@@ -38,8 +45,7 @@ const _focus = (lens, state$, {ns}={}) => {
     over,
     view,
     lens,
-    focus,
-    state$
+    focus
   }
 }
 

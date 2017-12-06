@@ -18,7 +18,20 @@ const _TodoList = require('./view/TodoList')
 const be = 'http://localhost:8080/'
 const elem = document.getElementById('focus')
 
-const {focus, state$} = _focus({})//{todos:[{title:'a'},{title:'b'}]})
+const render = (state) => {
+  console.log(state,'---state---',)
+  ReactDOM.render((
+    <App />
+  ), elem)
+}
+
+
+if (module.hot) {
+  module.hot.accept('./view/App', render)
+}
+
+
+const {focus, start} = _focus(render, {todos:[{title:'a'},{title:'b'}]})
 const todos_worker = _todos_worker(focus('todos'))
 const todos_service = _todos_service({be})
 const App = connect(_App, (ownProps)=>{
@@ -33,17 +46,4 @@ const TodoList = connect(_TodoList, (ownProps)=>{
   }
 })
 
-const render = (state) => {
-  console.log(state,'---state---',)
-  ReactDOM.render((
-    <App />
-  ), elem)
-}
-
-state$
-  .subscribe(render)
-
-
-if (module.hot) {
-  module.hot.accept('./view/App', render)
-}
+start()
