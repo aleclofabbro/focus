@@ -18,7 +18,7 @@ const _TodoList = require('./view/TodoList')
 
 
 Focus(({focus, set, defaultTo}) => {
-  defaultTo({todos:[{title:'a'},{title:'b'}]})
+  defaultTo(val => ({todos:null}))
   const be = 'http://localhost:8080/'
   const elem = document.getElementById('focus')
 

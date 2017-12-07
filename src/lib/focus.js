@@ -9,33 +9,28 @@ const root = (init) => {
     state = _state
   })
   const focus = _focus(root)
-  const next = init(focus)
+  const next = init(focus, {ns:[]})
   next(state)
 }
 
-
 const _focus = (lens, {ns}={}) => {
-  let default_to
-  let is_empty = v => {
-    return v === null ||
-      v === void 0 ||
-      v !== v
-  }
+  ns = ns || []
+  const _ns = ns
   const focus = (on, {ns}={}) => {
-    ns = ns ? ns : 'string' === typeof on ? on.split('.') : ns
+    ns = 'string' === typeof ns ? ns.split('.') : !ns ? 'string' === typeof on ? on.split('.') : [] : ns
     on = 'string' === typeof on ? R.lensPath(on.split('.')) : on
     const on_lens = R.compose(lens, on)
-    return _focus(on_lens, {ns})
+    return _focus(on_lens, {ns: _ns.concat(ns)})
   }
   const set = R.set(lens, R.__, null)
   const over = R.over(lens, R.__, null)
-  const view = () => {
-    const val = R.view(lens, null)
-    return is_empty(val) ? default_to : val
-  }
-  const defaultTo = (def, _is_empty) => {
-    is_empty = _is_empty || is_empty
-    default_to = def
+  const view = () => R.view(lens, null)
+  const defaultTo = fn => {
+    const val = view()
+    const def = fn(val)
+     if(def !== val) {
+      set(def)
+    }
   }
   return {
     defaultTo,
@@ -43,7 +38,8 @@ const _focus = (lens, {ns}={}) => {
     over,
     view,
     lens,
-    focus
+    focus,
+    ns
   }
 }
 
