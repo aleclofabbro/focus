@@ -33,17 +33,25 @@ Focus(({focus, set, defaultTo}) => {
     module.hot.accept('./view/App', render)
   }
 
-  const todos_worker = _todos_worker(focus('todos'))
+  const todos_worker1 = _todos_worker(focus('todos1'))
+  const todos_worker2 = _todos_worker(focus('todos2'))
   const todos_service = _todos_service({be})
   const App = connect(_App, (ownProps)=>{
     return {
-      TodoList
+      TodoListA,
+      TodoListB
     }
   })
-  const TodoList = connect(_TodoList, (ownProps)=>{
+  const TodoListA = connect(_TodoList, (ownProps)=>{
     return {
-      list: todos_worker.view(),
-      rm: todos_worker.rm
+      list: todos_worker1.view(),
+      rm: todos_worker1.rm
+    }
+  })
+  const TodoListB = connect(_TodoList, (ownProps)=>{
+    return {
+      list: todos_worker2.view(),
+      rm: todos_worker2.rm
     }
   })
   return render
