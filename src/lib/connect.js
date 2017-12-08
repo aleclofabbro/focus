@@ -1,7 +1,7 @@
 const React = require('react')
 const connect = (Cmp, props) => {
   return (ownProps) => (
-    <Cmp {...props(ownProps)} />
+    <Cmp {...ownProps} {...props(ownProps)} />
   )
 }
 

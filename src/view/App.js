@@ -1,11 +1,18 @@
 const React = require('react')
-module.exports = ({TodoListA, TodoListB}) => {
+module.exports = ({TodoLists, addList, rmList}) => {
   return (
     <div>
       <h1>TODO APP</h1>
+      <button onClick={addList}>add</button>
       <hr/>
-      <TodoListA />
-      <TodoListB />
+      {TodoLists.map((TodoList, i)=> (
+        <div key={i}>
+          <h2>TODO LIST {i}</h2>
+          <button onClick={()=>rmList(i)}>remove</button>
+          <TodoList />
+          <hr/>
+        </div>
+      ))}
     </div>
   )
 }
