@@ -1,27 +1,30 @@
 const R = require('ramda')
 
-const root = (init, initialState) => {
-  let state = {}
-  let reduction = null
-  let flag = true
-  const root = R.lens(() => state, _state => {
-    console.log('-------------------')
-    if(state !== _state){
-      state = _state
-      reduction = loop(focus)
-      if(flag){
-        flag = false
-        setTimeout(()=>{
-          next(state, reduction)
-          reduction = null
-          flag = true
-        })
+const Focus = (init, initial_subject) => {
+  let subject
+  let frame
+  let _iterations_frame_cnt = 0
+  const subject_lens = R.lens(() => subject, _next_subject => {
+    if(subject !== _next_subject){
+      subject = _next_subject
+      _iterations_frame_cnt++
+      console.log(`--------${_iterations_frame_cnt}-----------`)
+      // console.log(`^^^^^^^^${_iterations_frame_cnt}^^^^^^^^^^^`)
+      const _deepest_iteration_frame = capture(subject_focus)
+      _iterations_frame_cnt--
+      // console.log(`vvvvvvvv${_iterations_frame_cnt}vvvvvvvvvvv`)
+      if(!frame){
+        frame = _deepest_iteration_frame
+      }
+      if(!_iterations_frame_cnt){
+        project(subject, frame)
+        frame = void 0
       }
     }
   })
-  const focus = _focus(root)
-  const {next, loop} = init(focus)
-  focus.set(initialState)
+  const subject_focus = _focus(subject_lens)
+  const {project, capture} = init(subject_focus)
+  subject_focus.set(initial_subject)
 }
 
 const _focus = (lens) => {
@@ -40,9 +43,7 @@ const _focus = (lens) => {
       R.set(lens, val, null)
     }
   }
-  const over = over_fn => {
-    set(over_fn(view()))
-  }
+  const over = over_fn => R.compose(set, over_fn, view)()
   const view = () => R.view(lens, null)
 
   return {
@@ -54,4 +55,4 @@ const _focus = (lens) => {
   }
 }
 
-module.exports = root
+module.exports = Focus

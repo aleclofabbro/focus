@@ -1,5 +1,6 @@
 const React = require('react')
 module.exports = ({TodoLists, addList, rmList}) => {
+  // console.log('App view')
   return (
     <div>
       <h1>TODO APP</h1>

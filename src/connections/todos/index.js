@@ -1,16 +1,22 @@
 const R = require('ramda')
+const React = require('react')
 const connect = require('../../lib/connect')
 const TodoList = require('../../view/TodoList')
-module.exports = (TodoList_F) => {
+module.exports = (TodoList_F, index) => {
   const {view, set, over} = TodoList_F
-  over(val => val || [{title:'a'},{title:'b'}])
+  // console.log('TodoList conn', view())
+  // over(val => val || [{title:'a'},{title:'b'}])
+  if(!view()){
+    set([{title:`${index}a`},{title:`${index}b`}])
+    return
+  }
+
   const rm = (ix) => set(R.remove(ix, 1, view()))
   const getById = (id) => view().find(todo => todo.id === id)
-  return connect(TodoList, (ownProps)=>{
-    return {
-      getById,
-      list: view(),
-      rm
-    }
-  })
+  const ctl = {
+    getById,
+    list: view(),
+    rm
+  }
+  return (props)=>(<TodoList {...props} {...ctl}/>)
 }

@@ -1,5 +1,6 @@
 const React = require('react')
 module.exports = ({list, rm}) => {
+  // console.log('TodoList view')
   return (
     <ul>
       {

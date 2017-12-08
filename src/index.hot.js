@@ -9,11 +9,13 @@ const Focus = require('./lib/focus')
 
 const app_connection = require('./connections/app')
 
+const saved_state = JSON.parse(sessionStorage.getItem('todostate'))
 
-Focus((root) => {
+Focus((root_F) => {
   const elem = document.getElementById('focus')
   const render = (state, App) => {
-    console.log(state,'---state---',)
+    sessionStorage.setItem('todostate', JSON.stringify(state))
+    console.log('---Render---', state)
     ReactDOM.render((
       <App />
     ), elem)
@@ -21,8 +23,9 @@ Focus((root) => {
   if (module.hot) {
     module.hot.accept('./view/App', render)
   }
+  setTimeout(()=>root_F.set(saved_state), 500)
   return {
-    next: render,
-    loop: app_connection
+    project: render,
+    capture: app_connection
   }
-},{todoLists:[null,null]})
+})// ,saved_state)
