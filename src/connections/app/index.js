@@ -1,7 +1,7 @@
-const connect = require('../../lib/connect')
+const React = require('react')
+const R = require('ramda')
 const App = require('../../view/App')
 const todos_connection = require('../todos')
-const R = require('ramda')
 
 module.exports = (App_F) => {
   const {view, set, over, focus} = App_F
@@ -16,11 +16,10 @@ module.exports = (App_F) => {
   const rmList = R.compose(TodoLists_F.over, R.remove(R.__,1))
   const TodoLists = TodoLists_F.view()
     .map((todolist, index) => todos_connection(TodoLists_F.focus(index), index))
-  return connect(App, (ownProps)=>{
-    return {
-      addList,
-      rmList,
-      TodoLists
-    }
-  })
+  const ctl = {
+    addList,
+    rmList,
+    TodoLists
+  }
+  return (ownProps)=>(<App {...ownProps} {...ctl}/>)
 }

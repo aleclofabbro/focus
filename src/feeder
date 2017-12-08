@@ -1,0 +1,2 @@
+* un connector deve poter invaidare il ciclo e bloccarlo modificando lo stato (set | over)
+ 
