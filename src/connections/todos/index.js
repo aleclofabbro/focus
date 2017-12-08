@@ -1,6 +1,5 @@
 const R = require('ramda')
 const React = require('react')
-const connect = require('../../lib/connect')
 const TodoList = require('../../view/TodoList')
 module.exports = (TodoList_F, index) => {
   const {view, set, over} = TodoList_F
