@@ -10,6 +10,11 @@ const Focus = require('./lib/focus')
 const app_connection = require('./connections/app')
 
 const saved_state = JSON.parse(sessionStorage.getItem('todostate'))
+const default_state = null && {
+  count:0,
+  todoLists:[]
+}
+
 
 Focus((root_F) => {
   const elem = document.getElementById('focus')
@@ -23,7 +28,7 @@ Focus((root_F) => {
   if (module.hot) {
     module.hot.accept('./view/App', render)
   }
-  setTimeout(()=>root_F.set(saved_state), 500)
+  setTimeout(()=>root_F.set(saved_state || default_state), 500)
   return {
     project: render,
     capture: app_connection
