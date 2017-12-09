@@ -4,7 +4,7 @@ const Focus = (init, initial_subject) => {
   let subject
   let frame
   let _iterations_frame_cnt = 0
-  const subject_lens = R.lens(() => subject, _next_subject => {
+  const subject_lens = R.lens(() => subject, (_next_subject, __) => {
     console.log(`**`, _next_subject, __)
     // _next_subject = plugins.reduce((__next_subject,plugin)=>plugin(__next_subject, subject, __, subject_focus, frame), _next_subject)
     if(subject !== _next_subject){
