@@ -5,14 +5,12 @@ const todos_connection = require('../todos')
 
 module.exports = (App_F) => {
   const {view, set, over, focus} = App_F
-  // console.log('App conn', view())
-  if(!view()){
-    set({
+  console.log('1App conn', view())
+  !view() && set({
       count:0,
       todoLists:[]
     })
-    return
-  }
+  console.log('2App conn', view())
   const {todoLists, count} = view()
   const addList = () => {
     App_F.set({

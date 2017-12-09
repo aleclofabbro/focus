@@ -2,6 +2,7 @@
 require('../assets/css/focus/core.scss')
 
 // javascript
+const R = require('ramda')
 const React = require('react')
 const ReactDOM = require('react-dom')
 
@@ -17,6 +18,15 @@ const default_state = null && {
 
 
 Focus((root_F) => {
+  root_F.use((__next_subject, __, subject_focus, frame) => {
+    console.log('plugin:', __next_subject, __, subject_focus, frame)
+    const tll = R.compose(subject_focus.lens, R.lensPath(['todoLists']))
+      setTimeout(()=>{
+        if(!R.view(tll, null) || !R.view(tll, null).length){
+          R.over(tll,(tl)=>[[{title:'www'}], ...(tl||[])], null)
+        }
+      },1000)
+  })
   const elem = document.getElementById('focus')
   const render = (state, App) => {
     sessionStorage.setItem('todostate', JSON.stringify(state))
