@@ -1,14 +1,14 @@
 const React = require('react')
-module.exports = ({list, rm, add}) => {
+module.exports = ({todoList}) => {
   // console.log('TodoList view')
   return (
     <div>
-      <button onClick={add}>addtodo</button>
-
+      <button onClick={()=>todoList.add({title:'title'})}>addtodo</button>
+<span>{todoList.count}</span>  
       <ul>
         {
-          list.map((todo, ix) => (
-            <li key={ix} onClick={()=>rm(ix)}>{todo.title}</li>
+          todoList.list.map((todo, ix) => (
+            <li key={ix} onClick={()=>todoList.rm(ix)}>{todo.title}</li>
           ))
         }
       </ul>
