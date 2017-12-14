@@ -19,7 +19,7 @@ const elem = document.getElementById('focus')
 const render = () => {
 
   sessionStorage.setItem('todostate', JSON.stringify(appRoboto))
-  console.log('---Render---', appRoboto)
+  // console.log('---Render---', appRoboto)
   ReactDOM.render((
     <AppView app={appRoboto} />
   ), elem)

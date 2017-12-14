@@ -7,27 +7,23 @@ module.exports = (notify, init) =>{
     count:0
   }, init)
 
-  const add = target => todo => {
+  const add = (todo, target) => {
     // const todo = Todo(_todo)
     TodoList.list = [todo].concat(TodoList.list)
-    notify()
   }
 
-  const rm = target => index => {
+  const rm = (index, target) => {
     TodoList.list = TodoList.list.filter((item, _index) => _index!==index)
-    notify()
   }
 
-  const list = target => TodoList.list
 
   const get = {
-    add,
-    rm,
-    list,
     toJSON: ()=> TodoList
   }
 
   const set = {
+    add,
+    rm
   }
 
 
@@ -41,14 +37,14 @@ module.exports = (notify, init) =>{
     set: (oTarget, sKey, vValue) => {
       if(set[sKey]){
         set[sKey](vValue, oTarget);
-        return true
       }else{
         TodoList[sKey] = vValue
-        notify()
       }
+      notify()
+      return true
     }
   });
-setTimeout(()=> p.int = setInterval(()=>{++p.count;console.log('to')}, 1000))
+setTimeout(()=> p.int = setInterval(()=>{++p.count;/*console.log('to')*/}, 500))
 
   return p
 }
